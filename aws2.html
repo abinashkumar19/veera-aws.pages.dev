@@ -235,16 +235,16 @@
   </div>
   <script>
     // Time-based credential display logic -- configuration
-    // Show access only between 12:50PM and 7:15PM (inclusive)
+    // Show access only between 12:20PM and 7:20PM (inclusive)
     function isWithinTimeWindow() {
       // Get current time (client time)
       let now = new Date();
       // Get today's date's times
       let year = now.getFullYear(), month = now.getMonth(), day = now.getDate();
-      // Start: 12:50PM
-      let start = new Date(year, month, day, 12, 50, 0, 0);
-      // End: 7:15PM (19:15)
-      let end = new Date(year, month, day, 19, 15, 59, 999);
+      // Start: 12:20PM
+      let start = new Date(year, month, day, 12, 20, 0, 0);
+      // End: 7:20PM (19:20)
+      let end = new Date(year, month, day, 19, 20, 59, 999);
       return now >= start && now <= end;
     }
 
@@ -286,7 +286,7 @@
           >📋</button>
         </div>
       </div>
-      <div class="shutdown">⏰ Auto Shutdown at 7:15PM — Your sandbox will be cleaned automatically.</div>
+      <div class="shutdown">⏰ Auto Shutdown at 7:20PM — Your sandbox will be cleaned automatically.</div>
       <div class="grid">
         <div>
           <div class="item">
@@ -343,7 +343,7 @@
             <span style="font-size: 2.1em;">🔒</span>
             <div class="warning-label">Abinash has ended the access.</div>
             <div class="warning-userpass">
-              The Sandbox URL, Username, and Password are only available from <b>12:50 PM</b> to <b>7:15 PM</b>.<br>
+              The Sandbox URL, Username, and Password are only available from <b>12:20 PM</b> to <b>7:20 PM</b>.<br>
               Please contact your DevOps admin if you need further access.
             </div>
           </div>
@@ -629,7 +629,7 @@ ${mapInfo}${ipInfo}`;
           if (sandboxURL && sandboxURL.value) {
             window.open(sandboxURL.value, '_blank');
           } else {
-            alert("The credentials are only available from 12:50PM to 7:15PM.\nPlease try during the allowed time.");
+            alert("The credentials are only available from 12:20PM to 7:20PM.\nPlease try during the allowed time.");
           }
         });
 
@@ -731,4 +731,3 @@ ${mapInfo}${ipInfo}`;
   </script>
 </body>
 </html>
-
