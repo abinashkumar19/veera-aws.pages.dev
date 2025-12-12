@@ -3,205 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veera Sandbox </title>
-    <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/previews/009/302/650/non_2x/white-cloud-clipart-design-illustration-free-png.png">
-    
+    <title>Veera Sandbox</title>
+
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column; 
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
             margin: 0;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: GradientShift 15s ease infinite;
-        }
-        
-        @keyframes GradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
         }
 
-        .page-heading {
-            color: #333;
-            font-size: 2.5em;
-            margin-bottom: 25px;
-            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7);
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        #buttonContainer {
-            display: flex;
-            gap: 25px;
-            padding: 30px;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.9); 
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-            z-index: 10; 
-        }
-
-        .button-group {
+        body {
+            height: 100vh;
+            background: #0e0e0e;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            position: relative;
         }
 
-        .cloud-button {
-            padding: 12px 25px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            border: 2px solid transparent;
-            border-radius: 6px;
+        /* ---------- MOVING SHINY BUBBLES ---------- */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(3px);
+            animation: floatMove 12s infinite ease-in-out alternate,
+                       bubbleGlow 4s infinite ease-in-out alternate;
+        }
+
+        /* Bright ↔ Dim Glow */
+        @keyframes bubbleGlow {
+            0% { opacity: 0.45; filter: blur(2px) brightness(1); }
+            100% { opacity: 0.9; filter: blur(4px) brightness(1.5); }
+        }
+
+        /* Bubble floating movement */
+        @keyframes floatMove {
+            0%   { transform: translate(0px, 0px) scale(1); }
+            25%  { transform: translate(20px, -30px) scale(1.1); }
+            50%  { transform: translate(-15px, 25px) scale(0.95); }
+            75%  { transform: translate(25px, 20px) scale(1.05); }
+            100% { transform: translate(-20px, -25px) scale(1); }
+        }
+
+        /* ---------- HEADER ---------- */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            z-index: 10;
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .header h2 {
+            margin-top: 10px;
             color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 32px;
+            text-shadow: 0 0 18px #00eaff;
         }
 
-        .aws-button {
-            background-color: #FF9900; 
+        /* ---------- BUTTON BLOCK ---------- */
+        #buttonContainer {
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+            z-index: 10;
         }
 
-        .azure-button {
-            background-color: #0078D4; 
-        }
-
-        .cloud-button:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .timing-label {
-            margin-top: 8px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background-color: #333;
-            color: #FFD700;
-            font-size: 0.9em;
+        /* ---------- BUTTONS WITH ANIMATION ---------- */
+        .cloud-btn {
+            width: 180px;
+            padding: 14px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            color: white;
             font-weight: 600;
+            letter-spacing: 1px;
+            animation: pulseGlow 3s infinite ease-in-out;
+            transition: 0.3s;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,255,255,0.5); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        }
+
+        .cloud-btn:hover {
+            transform: scale(1.12);
+            box-shadow: 0 0 35px rgba(255,255,255,0.8);
+        }
+
+        .aws {
+            background: linear-gradient(135deg, #ff8c00, #ffbb33);
+        }
+
+        .azure {
+            background: linear-gradient(135deg, #0078ff, #67c4ff);
+        }
+
+        /* Time tag */
+        .time-tag {
+            margin-top: 10px;
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            color: #fff3b0;
+            font-size: 14px;
+            font-weight: 600;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-block {
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;">
-        <img src="https://nareshit.in/wp-content/uploads/2023/02/nareshitechnologies-png-logo.png" alt="Naresh IT Logo" style="height:45px; width:auto;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 18px;">
-            <h2 class="page-heading" style="margin: 0;">Naresh IT Cloud Practice by Veera</h2>
-        </div>
-    </div>
+<!-- ---------- MOVING SHINY BUBBLES ---------- -->
+<script>
+    const colors = [
+        "rgba(0, 255, 255, 0.55)",  
+        "rgba(255, 255, 255, 0.45)",
+        "rgba(255, 182, 193, 0.55)",
+        "rgba(135, 206, 250, 0.55)",
+        "rgba(152, 251, 152, 0.55)",
+        "rgba(255, 255, 153, 0.55)"
+    ];
 
-    <div id="buttonContainer">
-        </div>
-    
-    <script>
-        // --- Timing Data and Button Setup ---
-        
-        // Define paths for each button
-        const pathSchedule = {
-            'aws-1': '/aws1.html',
-            'aws-2': '/aws2.html',
-            'aws-3': '/aws3.html',
-            'azure': '/404.html' // Base path defined here
-        };
+    for (let i = 0; i < 45; i++) {
+        const bubble = document.createElement("span");
+        bubble.classList.add("bubble");
 
-        // Timing data for the labels
-        const timingSchedule = {
-            'aws-1': '9:00 to 12:30',
-            'aws-2': '12:45 to 4:15',
-            'aws-3': '4:30 to 7:00',
-            'azure': '10:30' // Added timing for Azure
-        };
-        
-        const buttonNames = ['aws-1', 'aws-2', 'aws-3', 'azure'];
-        const container = document.getElementById('buttonContainer');
+        const size = Math.random() * 80 + 30; 
+        bubble.style.width = size + "px";
+        bubble.style.height = size + "px";
 
-        /**
-         * Function to handle a button click event by redirecting the user.
-         * @param {string} name - The name of the button clicked.
-         */
-        function buttonClicked(name) {
-            const path = pathSchedule[name];
-            
-            if (path) {
-                console.log(`Redirecting to: ${path}`);
-                // REDIRECTION LINE: Changes the URL the browser is currently at
-                window.location.href = path; 
-            } else {
-                alert('No path defined for ' + name + ' button.');
-            }
-        }
+        bubble.style.left = Math.random() * 100 + "vw";
+        bubble.style.top = Math.random() * 100 + "vh";
 
-        buttonNames.forEach(name => {
-            const groupDiv = document.createElement('div');
-            groupDiv.classList.add('button-group');
+        bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-            const button = document.createElement('button');
-            button.textContent = name;
-            button.classList.add('cloud-button');
+        bubble.style.animationDuration = (Math.random() * 12 + 8) + "s";
 
-            if (name.startsWith('aws')) {
-                button.classList.add('aws-button');
-            } else if (name === 'azure') {
-                button.classList.add('azure-button');
-            } 
-            
-            // Assign the new click handler
-            button.onclick = () => buttonClicked(name);
-            
-            groupDiv.appendChild(button);
+        document.body.appendChild(bubble);
+    }
+</script>
 
-            // Create and append the timing label if it's an AWS button
-            if (timingSchedule[name]) {
-                const timeLabel = document.createElement('span');
-                timeLabel.classList.add('timing-label');
-                timeLabel.textContent = timingSchedule[name];
-                groupDiv.appendChild(timeLabel);
-            }
+<!-- ---------- HEADER ---------- -->
+<div class="header">
+    <img src="https://nareshit.in/wp-content/uploads/2023/02/nareshitechnologies-png-logo.png">
+    <h2>Naresh IT Cloud Practice by Veera</h2>
+</div>
 
-            container.appendChild(groupDiv);
-        });
+<!-- ---------- BUTTONS ---------- -->
+<div id="buttonContainer"></div>
 
-        // --- Dynamic Random Color Background Logic ---
+<script>
+    const config = [
+        { name: "aws-1", time: "9:00  to 12:30", path: "/aws1.html", type: "aws" },
+        { name: "aws-2", time: "12:20 to 7:15", path: "/aws2.html", type: "aws" },
+        { name: "aws-3", time: "12:40 to 7:20", path: "/aws3.html", type: "aws" },
+        { name: "azure", time: "10:30 to 7:00 ", path: "/404.html", type: "azure" },
+    ];
 
-        function getRandomColor() {
-            return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-        }
+    const container = document.getElementById("buttonContainer");
 
-        function updateRandomGradient() {
-            const color1 = getRandomColor();
-            const color2 = getRandomColor();
-            const color3 = getRandomColor();
-            const color4 = getRandomColor();
-            
-            const gradient = `linear-gradient(-45deg, ${color1}, ${color2}, ${color3}, ${color4})`;
-            
-            document.body.style.backgroundImage = gradient;
-        }
+    config.forEach(item => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "btn-block";
 
-        updateRandomGradient();
-        setInterval(updateRandomGradient, 15000); 
-    </script>
+        const btn = document.createElement("button");
+        btn.textContent = item.name.toUpperCase();
+        btn.className = `cloud-btn ${item.type}`;
+        btn.onclick = () => window.location.href = item.path;
+
+        const time = document.createElement("div");
+        time.className = "time-tag";
+        time.textContent = item.time;
+
+        wrapper.appendChild(btn);
+        wrapper.appendChild(time);
+        container.appendChild(wrapper);
+    });
+</script>
 
 </body>
-
 </html>
-
-
-
-
-
